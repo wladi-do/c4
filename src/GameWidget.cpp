@@ -8,6 +8,7 @@
 
 GameWidget::GameWidget(QWidget* parent)
     : ARToolkitWidget(parent)
+    , m_model(0)
 {
 #ifdef ARTOOLKIT_FOUND
     pattChip = loadPattern("patt.hiro");
@@ -16,7 +17,7 @@ GameWidget::GameWidget(QWidget* parent)
     addPattern(pattField);
 
     chip = new GlChip();
-    field = new GlField();
+    field = new GlField(this);
 #endif
 }
 
@@ -105,11 +106,17 @@ void GameWidget::keyPressEvent(QKeyEvent* event)
 
     if(column > 0) {
         qDebug() << "number pressed" << column;
-        emit arChipDropped(column);
+        emit arChipDropped(column - 1);
     }
 }
 
 void GameWidget::setGameModel(GameModel* model)
 {
     m_model = model;
+}
+
+
+GameModel* GameWidget::gameModel()
+{
+    return m_model;
 }
